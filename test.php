@@ -63,7 +63,7 @@ class FunctionsManager {
 		$functions = isset($matches['custom_names']) ? array_merge($matches['names'], $matches['custom_names']) : $matches['names'];
 		sort($functions);
 		return array_filter($functions, function ($value) {
-			return $value !== '';
+			return $value;
 		});
 	}
 
