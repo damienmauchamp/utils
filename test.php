@@ -2,6 +2,7 @@
 
 define('REGEX_PHP_FUNCTION', '/function\s+(?<names>[^()]+)/m');
 define('REGEX_JS_FUNCTION', '/function\s+(?<names>[^()]+)/m');
+define('REGEX_JS_FUNCTION_WITH_CUSTOM', '/(\w+\.\w+\.(?<custom_names>[^()]+)\s+=\s+)?function\s+(?<names>[^()]+)?/m');
 define('FILE_PHP_FUNCTIONS', 'php/functions.php');
 define('FILE_JS_FUNCTIONS', 'js/functions.js');
 
@@ -39,7 +40,8 @@ class FunctionsManager {
 		switch($type) {
 			case 'js':
 				$file = FILE_JS_FUNCTIONS;
-				$regex = REGEX_JS_FUNCTION;
+				//$regex = REGEX_JS_FUNCTION;
+				$regex = REGEX_JS_FUNCTION_WITH_CUSTOM;
 				break;
 			case 'php':
 				$file = FILE_PHP_FUNCTIONS;
@@ -58,7 +60,8 @@ class FunctionsManager {
 		$lang = $this->getTypeInfo($type);
 		$content = file_get_contents($lang->file);
 		preg_match_all($lang->regex, $content, $matches);
-		$functions = $matches['names'];
+
+		$functions = isset($matches['custom_names']) ? array_merge($matches['names'], $matches['custom_names']) : $matches['names'];
 		sort($functions);
 		return $functions;
 	}
@@ -79,7 +82,10 @@ class FunctionsManager {
 			$content = file_get_contents($lang->file);
 			preg_match('/function\s+' . $name . '\s*\(/', $content, $matches, PREG_OFFSET_CAPTURE);
 			if (!$matches) {
-				return $body;
+				preg_match('/(\w+\.\w+\.' . $name . '\s+=\s+)function\s*\(/', $content, $matches, PREG_OFFSET_CAPTURE);
+				if (!$matches) {
+					return $body;
+				}
 			}
 			$start = $matches[0][1];
 			$bracketsCount = 0;
@@ -113,7 +119,7 @@ $fm = new FunctionsManager();
 
 var_dump("JS");
 var_dump($fm->getJSFunctions());
-var_dump($fm->getJSFunction('OKOKOKOK'));
+var_dump($fm->getJSFunction('startsWith'));
 
 var_dump("PHP");
 var_dump($fm->getPHPFunctions());

@@ -15,3 +15,7 @@ function oKOKOKOK() {
 function aaaa() {
 	return 3;
 }
+
+String.prototype.startsWith = function (str){
+	return this.indexOf(str) === 0;
+};
