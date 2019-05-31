@@ -60,10 +60,11 @@ class FunctionsManager {
 		$lang = $this->getTypeInfo($type);
 		$content = file_get_contents($lang->file);
 		preg_match_all($lang->regex, $content, $matches);
-
 		$functions = isset($matches['custom_names']) ? array_merge($matches['names'], $matches['custom_names']) : $matches['names'];
 		sort($functions);
-		return $functions;
+		return array_filter($functions, function ($value) {
+			return $value !== '';
+		});
 	}
 
 	private function getFunction($type, $name) {
@@ -73,7 +74,7 @@ class FunctionsManager {
 		if ($type === 'php') {
 			$f = new ReflectionFunction($name);
 			$filename = $f->getFileName();
-			$start_line = $f->getStartLine() - 1; // it's actually - 1, otherwise you wont get the function() block
+			$start_line = $f->getStartLine() - 1; // -1 to get the function() block
 			$end_line = $f->getEndLine();
 			$length = $end_line - $start_line;
 			$source = file($filename);
