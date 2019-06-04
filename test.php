@@ -39,16 +39,16 @@ class FunctionsManager {
 	private function getTypeInfo($type) {
 		switch($type) {
 			case 'js':
-				$file = FILE_JS_FUNCTIONS;
+			$file = FILE_JS_FUNCTIONS;
 				//$regex = REGEX_JS_FUNCTION;
-				$regex = REGEX_JS_FUNCTION_WITH_CUSTOM;
-				break;
+			$regex = REGEX_JS_FUNCTION_WITH_CUSTOM;
+			break;
 			case 'php':
-				$file = FILE_PHP_FUNCTIONS;
-				$regex = REGEX_PHP_FUNCTION;
-				break;
+			$file = FILE_PHP_FUNCTIONS;
+			$regex = REGEX_PHP_FUNCTION;
+			break;
 			default:
-				return false;
+			return false;
 		}
 		return (object) array(
 			'file' => $file,
@@ -118,15 +118,31 @@ class FunctionsManager {
 
 $fm = new FunctionsManager();
 
-var_dump("JS");
-var_dump($fm->getJSFunctions());
-var_dump($fm->getJSFunction('startsWith'));
+?>
 
-var_dump("PHP");
-var_dump($fm->getPHPFunctions());
-var_dump($fm->getPHPFunction('azer_ty9'));
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Hey</title>
+	<link href="lib/prism/prism.css" rel="stylesheet" />
+</head>
+<body>
 
+	<h1>JS</h1>
+	<pre><code class="language-javascript"><?= $fm->getJSFunction('startsWith') ?></code></pre>
+	<pre><?= print_r($fm->getJSFunctions(), true) ?></pre>
+	<hr/>
 
+	<h1>PHP</h1>
+	<pre><code class="language-php"><?= $fm->getPHPFunction('azer_ty9') ?></code></pre>
+	<pre><?= print_r($fm->getPHPFunctions(), true) ?></pre>
+	<hr/>
+
+	<script src="lib/prism/prism.js"></script>
+</body>
+</html>
+
+<?
 exit;
 
 function __getFunctions() {
@@ -150,6 +166,6 @@ $functions = __getFunctions();
 
 foreach ($functions as $function) {
 	echo "
-		<h1>" . $function . "</h1>
-		<pre>" . __getFunctionContent($function) . "</pre>";
+	<h1>" . $function . "</h1>
+	<pre>" . __getFunctionContent($function) . "</pre>";
 }
