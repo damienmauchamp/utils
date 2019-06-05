@@ -2,7 +2,8 @@
 
 define('REGEX_PHP_FUNCTION', '/function\s+(?<names>[^()]+)/m');
 define('REGEX_JS_FUNCTION', '/function\s+(?<names>[^()]+)/m');
-define('REGEX_JS_FUNCTION_WITH_CUSTOM', '/(\w+\.\w+\.(?<custom_names>[^()]+)\s+=\s+)?function\s+(?<names>[^()]+)?/m');
+//define('REGEX_JS_FUNCTION_WITH_CUSTOM', '/((\w+|\$)\.\w+\.(?<custom_names>[^()]+)\s+=\s+)?function\s*(?<names>[^()]+)?/m');
+define('REGEX_JS_FUNCTION_WITH_CUSTOM', '/(((\w+|\$)\.\w+\.(?<custom_names>[^()]+)\s+=\s+)|^)function\s*(?<names>[^()]+)?/m');
 define('FILE_PHP_FUNCTIONS', 'php/functions.php');
 define('FILE_JS_FUNCTIONS', 'js/functions.js');
 
@@ -83,7 +84,7 @@ class FunctionsManager {
 			$content = file_get_contents($lang->file);
 			preg_match('/function\s+' . $name . '\s*\(/', $content, $matches, PREG_OFFSET_CAPTURE);
 			if (!$matches) {
-				preg_match('/(\w+\.\w+\.' . $name . '\s+=\s+)function\s*\(/', $content, $matches, PREG_OFFSET_CAPTURE);
+				preg_match('/((\w+|\$)\.\w+\.' . $name . '\s+=\s+)function\s*\(/', $content, $matches, PREG_OFFSET_CAPTURE);
 				if (!$matches) {
 					return $body;
 				}
@@ -130,6 +131,7 @@ $fm = new FunctionsManager();
 
 	<h1>JS</h1>
 	<pre><code class="language-javascript"><?= $fm->getJSFunction('startsWith') ?></code></pre>
+	<pre><code class="language-javascript"><?= $fm->getJSFunction('myPlugin') ?></code></pre>
 	<pre><?= print_r($fm->getJSFunctions(), true) ?></pre>
 	<hr/>
 
@@ -141,31 +143,3 @@ $fm = new FunctionsManager();
 	<script src="lib/prism/prism.js"></script>
 </body>
 </html>
-
-<?
-exit;
-
-function __getFunctions() {
-	$content = file_get_contents(FILE_PHP_FUNCTIONS);
-	preg_match_all(REGEX_PHP_FUNCTION, $content, $matches);
-	return $matches['names'];
-}
-
-function __getFunctionContent($name) {
-	$func = new ReflectionFunction($name);
-	$filename = $func->getFileName();
-	$start_line = $func->getStartLine() - 1; // it's actually - 1, otherwise you wont get the function() block
-	$end_line = $func->getEndLine();
-	$length = $end_line - $start_line;
-	$source = file($filename);
-	$body = implode("", array_slice($source, $start_line, $length));
-	return $body;
-}
-
-$functions = __getFunctions();
-
-foreach ($functions as $function) {
-	echo "
-	<h1>" . $function . "</h1>
-	<pre>" . __getFunctionContent($function) . "</pre>";
-}

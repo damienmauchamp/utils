@@ -19,3 +19,9 @@ function aaaa() {
 String.prototype.startsWith = function (str){
 	return this.indexOf(str) === 0;
 };
+
+$.fn.myPlugin = function() {
+	return this.each(function() {
+		//Do stuff
+	});
+};
