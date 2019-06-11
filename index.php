@@ -136,6 +136,11 @@ function displayFunctions($functions) {
 <head>
 	<title>Hey</title>
 	<link href="lib/prism/prism.css" rel="stylesheet" />
+	<style>
+		code[class*="language-"], pre[class*="language-"] {
+			font-size: 12px;
+		}
+	</style>
 </head>
 <body>
 
