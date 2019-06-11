@@ -110,14 +110,24 @@ class FunctionsManager {
 			}
 		}
 		return $body;
-
 	}
-
-
 }
 //
 
 $fm = new FunctionsManager();
+
+$functions = (object) array(
+	'js' => $fm->getJSFunctions(),
+	'php' => $fm->getPHPFunctions()
+);
+
+function displayFunctions($functions) {
+	$options = '';
+	foreach ($functions as $function) {
+		$options .= '<option value="' . $function . '">' . $function . '</option>';
+	}
+	return $options;
+}
 
 ?>
 
@@ -130,14 +140,17 @@ $fm = new FunctionsManager();
 <body>
 
 	<h1>JS</h1>
+	<select>
+		<?= displayFunctions($functions->js) ?>
+	</select>
 	<pre><code class="language-javascript"><?= $fm->getJSFunction('startsWith') ?></code></pre>
-	<pre><code class="language-javascript"><?= $fm->getJSFunction('myPlugin') ?></code></pre>
-	<pre><?= print_r($fm->getJSFunctions(), true) ?></pre>
 	<hr/>
 
 	<h1>PHP</h1>
-	<pre><code class="language-php"><?= $fm->getPHPFunction('azer_ty9') ?></code></pre>
-	<pre><?= print_r($fm->getPHPFunctions(), true) ?></pre>
+	<select>
+		<?= displayFunctions($functions->php) ?>
+	</select>
+	<pre><code class="language-php"><?= $fm->getPHPFunction($functions->php[3]) ?></code></pre>
 	<hr/>
 
 	<script src="lib/prism/prism.js"></script>
