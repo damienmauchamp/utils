@@ -148,14 +148,15 @@ function displayFunctions($functions) {
 	<select>
 		<?= displayFunctions($functions->js) ?>
 	</select>
-	<pre><code class="language-javascript"><?= $fm->getJSFunction('startsWith') ?></code></pre>
+	<pre><code class="language-javascript"><?= $fm->getJSFunction('array_column') ?></code></pre>
 	<hr/>
 
 	<h1>PHP</h1>
 	<select>
 		<?= displayFunctions($functions->php) ?>
 	</select>
-	<pre><code class="language-php"><?= $fm->getPHPFunction($functions->php[3]) ?></code></pre>
+	<!--pre><code class="language-php"><?= $fm->getPHPFunction($functions->php[3]) ?></code></pre-->
+	<pre><code class="language-php"><?= $fm->getPHPFunction('test') ?></code></pre>
 	<hr/>
 
 	<script src="lib/prism/prism.js"></script>

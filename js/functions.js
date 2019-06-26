@@ -25,3 +25,13 @@ $.fn.myPlugin = function() {
 		//Do stuff
 	});
 };
+
+/**
+ * Équivalent de la fonction array_column en PHP
+ * @param {type} arr
+ * @param {type} column
+ * @returns {unresolved}
+ */
+function array_column(arr, column) {
+	return arr.map(x => x[column]);
+}

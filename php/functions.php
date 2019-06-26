@@ -1,5 +1,18 @@
 <?php
 
+function ok() {
+	return "ok";
+}
+
+function test() {
+	$test = "}";
+	$test .= '"';
+	$test .= '}}';
+	$test .= "'" . "'";
+	$test .= '}}';
+	return test;
+}
+
 function recuperer_valeur_par_colonne($array, $valeur, $colonne, $retourner_index = false) {
 	$index = array_search($valeur, array_column($array, $colonne));
 	// vérification que $index !== false
