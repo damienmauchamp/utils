@@ -83,3 +83,18 @@ jQuery.fn.closestToOffset = function(offset) {
 jQuery.fn.deplacer_element_vers = function(cible) {
     return $(this).detach().appendTo($(cible));
 }
+
+/**
+ * Dans un tableau d'objets, vérifue qu'une clé est toujours égale à une valeur données
+ * @param {array} tableau
+ * @param {mixed} cle
+ * @param {boolean} valeur
+ * @param {boolean} retourner_compte
+ * @returns {array|integer}
+ */
+function verifier_valeur_cle(tableau, cle, valeur = true, retourner_compte = false) {
+    var resultat = tableau.filter(v => {
+        return v[cle] == valeur;
+    });
+    return retourner_compte ? resultat.length : resultat;
+}
