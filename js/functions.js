@@ -98,3 +98,31 @@ function verifier_valeur_cle(tableau, cle, valeur = true, retourner_compte = fal
     });
     return retourner_compte ? resultat.length : resultat;
 }
+
+/**
+ * Désérialise un tableau de paramètres
+ * @param {string} str
+ * @returns {object}
+ */
+function deserialiser_params(str) {
+    var tab = {};
+    str.replace(/(?:\s|\?)*(.*)\s*/, '$1').split('&').forEach(s => {
+        var split = s.split('=');
+        if (/\[\]$/.test(split[0])) {
+            if (typeof tab[split[0]] === "undefined") {
+                tab[split[0].replace(/\[\]$/, '')] = [];
+            }
+            tab[split[0].replace(/\[\]$/, '')].push(split[1]);
+        } else if (typeof tab[split[0]] !== "undefined") {
+            if (typeof tab[split[0]] !== "object") {
+                var tmp = tab[split[0]];
+                tab[split[0]] = [];
+                tab[split[0]].push(tmp);
+            }
+            tab[split[0]].push(split[1]);
+        } else {
+            tab[split[0]] = split[1];
+        }
+    });
+    return tab;
+}
