@@ -108,20 +108,23 @@ function deserialiser_params(str) {
     var tab = {};
     str.replace(/(?:\s|\?)*(.*)\s*/, '$1').split('&').forEach(s => {
         var split = s.split('=');
-        if (/\[\]$/.test(split[0])) {
-            if (typeof tab[split[0]] === "undefined") {
-                tab[split[0].replace(/\[\]$/, '')] = [];
+        var cle = split[0],
+            valeur = split[1];
+        if (/\[\]$/.test(cle)) {
+            var cle_remplacee = cle.replace(/\[\]$/, '');
+            if (typeof tab[cle_remplacee] === "undefined") {
+                tab[cle_remplacee] = [];
             }
-            tab[split[0].replace(/\[\]$/, '')].push(split[1]);
-        } else if (typeof tab[split[0]] !== "undefined") {
-            if (typeof tab[split[0]] !== "object") {
-                var tmp = tab[split[0]];
-                tab[split[0]] = [];
-                tab[split[0]].push(tmp);
+            tab[cle_remplacee].push(valeur);
+        } else if (typeof tab[cle] !== "undefined") {
+            if (typeof tab[cle] !== "object") {
+                var tmp = tab[cle];
+                tab[cle] = [];
+                tab[cle].push(tmp);
             }
-            tab[split[0]].push(split[1]);
+            tab[cle].push(valeur);
         } else {
-            tab[split[0]] = split[1];
+            tab[cle] = valeur;
         }
     });
     return tab;
